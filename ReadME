@@ -3,23 +3,25 @@ Quant project aimed to create an order book and a trading engine.
 
 Feel free to fork and use this code as you see fit, will build in Go because I want to learn Go and its faster than python, easier to debug than Java, and more enjoyable than C# to work with.
 
+
+
 order-book/
 │
 ├── cmd/
-│   └── orderbook/
-│       └── main.go        # Entry point of the application
+│   └── app/                # Entry point directory for the application
+│       └── main.go         # Entry point of the application
 │
 ├── internal/
-│   ├── engine/            # Trading engine logic
-│   │   └── engine.go
+│   ├── engine/             # Package containing the core trading engine logic
+│   │   └── engine.go       # Trading engine implementation
 │   │
-│   ├── orderbook/         # Order book logic
-│   │   ├── order.go
-│   │   └── orderbook.go
+│   ├── book/               # Package containing the order book logic
+│   │   ├── order.go        # Definitions and operations related to orders
+│   │   └── book.go         # Order book management
 │   │
-│   └── matching/          # Order matching algorithms
-│       └── matcher.go
+│   └── matcher/            # Package for order matching algorithms
+│       └── matcher.go      # Matching algorithm implementation
 │
-├── go.mod                 # Go module file
-├── go.sum                 # Dependencies checksum file
-└── README.md              # Project documentation
+├── go.mod                  # Go module file
+├── go.sum                  # Dependencies checksum file
+└── README.md               # Project documentation

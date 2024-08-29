@@ -1,12 +1,15 @@
-package orderbook
 
-import "time"
+package book
+
+import (
+	"time"
+)
 
 type OrderType int
 
 const (
 	Buy OrderType = iota
-	sell
+	Sell
 )
 
 type Order struct {
