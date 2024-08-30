@@ -5,6 +5,7 @@ Feel free to fork and use this code as you see fit, will build in Go because I w
 
 
 
+
 order-book/
 │
 ├── cmd/
@@ -18,6 +19,7 @@ order-book/
 │   ├── book/               # Package containing the order book logic
 │   │   ├── order.go        # Definitions and operations related to orders
 │   │   └── book.go         # Order book management
+|   |   |__book_test.go     # Unit tests for the order book
 │   │
 │   └── matcher/            # Package for order matching algorithms
 │       └── matcher.go      # Matching algorithm implementation
@@ -25,3 +27,7 @@ order-book/
 ├── go.mod                  # Go module file
 ├── go.sum                  # Dependencies checksum file
 └── README.md               # Project documentation
+
+
+when running tests do it the main directory
+go test ./internal/book
