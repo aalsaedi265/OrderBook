@@ -5,6 +5,11 @@ Feel free to fork and use this code as you see fit, will build in Go because I w
 
 
 
+go build, go test  get the go.sum 
+go mod tidy ensures that the go.mod file matches the source code in the module
+
+
+
 
 order-book/
 │
@@ -31,3 +36,17 @@ order-book/
 
 when running tests do it the main directory
 go test ./internal/book
+
+*BOOK FUNCTIONALITY
+    1. Expand Order Structure
+    You might want to add more details to the Order struct, such as timestamps, to keep track of when orders were placed, or other metadata.
+
+    2. Implement Listing Orders
+    Next, we’ll add a method to list orders currently in the OrderBook.
+
+*MATCH FUNCTIONLITY 
+    Order Matching Logic: The goal is to match buy orders with sell orders. A buy order should match the lowest available sell order that meets or beats its price, and vice versa.
+
+    Execution of Trades: When a match is found, we need to execute the trade, meaning we'll reduce the quantity of the matched orders and remove them if fully filled.
+
+    Partial Fills: If an order can only be partially matched, it should be partially filled, and the remaining quantity should stay in the order book.
