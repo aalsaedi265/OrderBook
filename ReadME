@@ -12,6 +12,9 @@ go mod tidy ensures that the go.mod file matches the source code in the module
 go test ./internal/matcher
 go test ./internal/book
 
+## Run orderbook trading engine
+"from main dir" go run cmd/app/main.go
+
 
 order-book/
 │

@@ -49,9 +49,5 @@ func (b *Book) RemoveBuyExecutedOrders(index int) {
 	b.buyOrders = append(b.buyOrders[:index], b.buyOrders[index+1:]...)
 }
 func (b *Book) RemoveSellOrders(index int) {
-     // Replace the order at `index` with the last order in the list
-    b.sellOrders[index] = b.sellOrders[len(b.sellOrders)-1]
-
-    // Shorten the slice to remove the last element
-    b.sellOrders = b.sellOrders[:len(b.sellOrders)-1]
+    b.sellOrders = append(b.sellOrders[:index], b.sellOrders[index+1:]...)
 }

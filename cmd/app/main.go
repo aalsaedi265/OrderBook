@@ -3,33 +3,27 @@ package main
 import (
 	"fmt"
 	"orderbook_tradingEngine/internal/book"
+	"orderbook_tradingEngine/internal/engine"
 )
 
 
 func main() {
-	// Initialize the order book
-	orderBook := book.NewBook()
+	// Initialize the trading engine
+	tradingEngine := engine.NewTradingEngine()
 
-	// Example: Add a few orders
-	order1 := book.Order{
-		ID:     "1",
-		Type:   book.Buy,
-		Price:  100.0,
-		Amount: 5,
-	}
-	orderBook.AddOrder(order1)
+	// Example: Add a buy order through the engine
+	order1 := book.NewLimitOrder("1", book.Buy, 100.0, 5)
+	tradingEngine.ProcessOrder(order1)
 
-	order2 := book.Order{
-		ID:     "2",
-		Type:   book.Sell,
-		Price:  105.0,
-		Amount: 3,
-	}
-	orderBook.AddOrder(order2)
+	// Example: Add a sell order through the engine
+	order2 := book.NewLimitOrder("2", book.Sell, 105.0, 3)
+	tradingEngine.ProcessOrder(order2)
 
-	// List all buy orders
-	fmt.Println("Buy Orders:", orderBook.ListOrders(book.Buy))
+	// Add a higher buy order to see if matching happens
+	order3 := book.NewLimitOrder("3", book.Buy, 120.0, 5)
+	tradingEngine.ProcessOrder(order3)
 
-	// List all sell orders
-	fmt.Println("Sell Orders:", orderBook.ListOrders(book.Sell))
+	// Display the current order book
+	fmt.Println("Buy Orders:", tradingEngine.GetOrderBook().BuyOrders())
+	fmt.Println("Sell Orders:", tradingEngine.GetOrderBook().SellOrders())
 }

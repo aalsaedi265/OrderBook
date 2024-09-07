@@ -1,13 +1,14 @@
 package matcher
 
 import (
-	"orderbook_tradingEngine/internal/book"
-	"sort"
 	"fmt"
+	"sort"
+	"orderbook_tradingEngine/internal/book"
 )
 
+// MatchOrders attempts to match buy and sell orders in the order book.
 func MatchOrders(b *book.Book) {
-	// Lock the order book while matching to avoid race conditions
+	// Lock the order book to ensure thread safety
 	b.Mu.Lock()
 	defer b.Mu.Unlock()
 
@@ -21,44 +22,58 @@ func MatchOrders(b *book.Book) {
 		return b.SellOrders()[i].Price < b.SellOrders()[j].Price
 	})
 
-	// Process matching orders
+	fmt.Println("DEBUG: Start matching orders")
+	fmt.Println("DEBUG: Current Buy Orders:", b.BuyOrders())
+	fmt.Println("DEBUG: Current Sell Orders:", b.SellOrders())
+
+	// Process matching orders as long as we have both buy and sell orders
 	for len(b.BuyOrders()) > 0 && len(b.SellOrders()) > 0 {
 		buyOrder := b.BuyOrders()[0]   // Highest buy price
 		sellOrder := b.SellOrders()[0] // Lowest sell price
 
-		// Check if a match is possible
+		fmt.Printf("DEBUG: Trying to match Buy Order: %v with Sell Order: %v\n", buyOrder, sellOrder)
+
+		// Check if the buy price is greater than or equal to the sell price
 		if buyOrder.Price >= sellOrder.Price {
-			// Determine the quantity that can be traded
+			// Determine the amount that can be traded
 			tradeAmount := min(buyOrder.Amount, sellOrder.Amount)
 
-			// Execute the trade (reduce amounts)
+			// Execute the trade by reducing the amounts
 			buyOrder.Amount -= tradeAmount
 			sellOrder.Amount -= tradeAmount
 
-			// Debugging information
-			fmt.Printf("Trade executed: Buy %d @ %f, Sell %d @ %f\n", tradeAmount, buyOrder.Price, tradeAmount, sellOrder.Price)
+			// Debugging info for successful trades
+			fmt.Printf("Trade executed: %d units @ $%.2f\n", tradeAmount, buyOrder.Price)
 
-			// Remove fully executed orders using the existing methods
+			// Remove fully filled orders or update partially filled ones
 			if buyOrder.Amount == 0 {
-				b.RemoveBuyExecutedOrders(0) // Remove the first buy order
-				fmt.Printf("Buy order fully executed and removed, %d \n", buyOrder.Amount)
+				b.RemoveBuyExecutedOrders(0) // Remove fully filled buy order
+				fmt.Println("Buy order fully filled and removed.")
 			} else {
-				b.BuyOrders()[0] = buyOrder // Update the slice with the partially filled order
+				// Update the order book with partially filled buy order
+				b.BuyOrders()[0] = buyOrder
+				fmt.Printf("Buy order partially filled, remaining amount: %d\n", buyOrder.Amount)
 			}
+
 			if sellOrder.Amount == 0 {
-				b.RemoveSellOrders(0) // Remove the first sell order
-				fmt.Printf("Sell order fully executed and removed, %d \n", sellOrder.Amount)
+				b.RemoveSellOrders(0) // Remove fully filled sell order
+				fmt.Println("Sell order fully filled and removed.")
 			} else {
+				// Update the order book with partially filled sell order
 				b.SellOrders()[0] = sellOrder
+				fmt.Printf("Sell order partially filled, remaining amount: %d\n", sellOrder.Amount)
 			}
+
 		} else {
-			// No match possible, exit the loop
+			// No match is possible if buy price is lower than sell price, break out of the loop
+			fmt.Println("No more matches possible.")
 			break
 		}
 	}
+	fmt.Println("DEBUG: End of matching orders")
 }
 
-// Utility function to find the minimum of two integers
+// Utility function to find the minimum of two numbers
 func min(a, b int) int {
 	if a < b {
 		return a

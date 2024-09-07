@@ -26,6 +26,15 @@ type Book struct {
     Mu         sync.Mutex
 }
 
+func NewLimitOrder(id string, orderType OrderType, price float64, amount int) Order{
+	return Order{
+		ID: id,
+		Type: orderType,
+		Price: price,
+		Amount: amount,
+		Timestamp: time.Now(),
+	}
+}
 
 
 func (b *Book) BuyOrders() []Order {
