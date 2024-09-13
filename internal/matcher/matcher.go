@@ -73,6 +73,36 @@ func MatchOrders(b *book.Book) {
 	fmt.Println("DEBUG: End of matching orders")
 }
 
+func MatchMarketOrder(b *book.Book, order book.Order, matchType  book.OrderType){
+	if matchType  == book.Sell{
+		for len(b.SellOrders()) > 0 && order.Amount > 0{
+			sellOrder := b.SellOrders()[0]
+			if order.Amount > 0{
+				tradeAmount := min(order.Amount, sellOrder.Amount)
+				order.Amount -= tradeAmount
+				sellOrder.Amount -= tradeAmount
+				fmt.Printf("Market Buy executed: %d units @ $%.2f\n", tradeAmount, sellOrder.Price)
+				if sellOrder.Amount == 0{
+					b.RemoveSellOrders(0)
+				}
+			}
+		}
+	} else if matchType  == book.Buy{
+		for len(b.BuyOrders()) > 0 && order.Amount > 0 {
+			buyOrder := b.BuyOrders()[0]
+			if order.Amount > 0 {
+				tradeAmount := min(order.Amount, buyOrder.Amount)
+				order.Amount -= tradeAmount
+				buyOrder.Amount -= tradeAmount
+				fmt.Printf("Market Sell executed: %d units @ $%.2f\n", tradeAmount, buyOrder.Price)
+				if buyOrder.Amount == 0 {
+					b.RemoveBuyExecutedOrders(0) // Remove fully filled buy order
+				}
+			}
+		}
+	}
+}
+
 // Utility function to find the minimum of two numbers
 func min(a, b int) int {
 	if a < b {

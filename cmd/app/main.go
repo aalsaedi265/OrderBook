@@ -19,9 +19,22 @@ func main() {
 	order2 := book.NewLimitOrder("2", book.Sell, 105.0, 3)
 	tradingEngine.ProcessOrder(order2)
 
-	// Add a higher buy order to see if matching happens
-	order3 := book.NewLimitOrder("3", book.Buy, 120.0, 5)
-	tradingEngine.ProcessOrder(order3)
+	// Add market buy order (will execute immediately at the best available sell price)
+	marketBuyOrder := book.Order{
+		ID:     "3",
+		Type:   book.MarketBuy,
+		Amount: 2,
+	}
+	tradingEngine.ProcessOrder(marketBuyOrder)
+
+	// Add market sell order (will execute immediately at the best available buy price)
+	marketSellOrder := book.Order{
+		ID:     "4",
+		Type:   book.MarketSell,
+		Amount: 3,
+	}
+	tradingEngine.ProcessOrder(marketSellOrder)
+
 
 	// Display the current order book
 	fmt.Println("Buy Orders:", tradingEngine.GetOrderBook().BuyOrders())

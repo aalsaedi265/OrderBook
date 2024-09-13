@@ -38,7 +38,7 @@ order-book/
 ├── go.sum                  # Dependencies checksum file
 └── README.md               # Project documentation
 
-
+MVP
 when running tests do it the main directory
 go test ./internal/book
 
@@ -54,4 +54,14 @@ go test ./internal/book
 
     Execution of Trades: When a match is found, we need to execute the trade, meaning we'll reduce the quantity of the matched orders and remove them if fully filled.
 
-    Partial Fills: If an order can only be partially matched, it should be partially filled, and the remaining quantity should stay in the order book.
+    Partial Fills: If an order can only be partially matched, it should be partially filled, and the remaining quantity should stay in the order book.'
+
+
+## MVP done
+
+Advanced FUNCTIONALITY
+Market Orders: Implement support for market orders that execute immediately at the best available price.
+Order Cancellation: Allow orders to be canceled by their ID.
+
+Order Book Depth: Provide a way to view the depth of the order book, showing how much is available at different price levels.
+Partial Order Handling: Add logic for tracking and reporting partially filled orders.

@@ -10,6 +10,8 @@ type OrderType int
 const (
 	Buy OrderType = iota
 	Sell
+	MarketBuy
+	MarketSell
 )
 
 type Order struct {

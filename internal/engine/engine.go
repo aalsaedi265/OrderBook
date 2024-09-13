@@ -18,8 +18,19 @@ func NewTradingEngine() *TradingEngine{
 
 // ProcessOrder adds an order to the book and triggers matching
 func (e *TradingEngine) ProcessOrder(order book.Order) {
-	e.OrderBook.AddOrder(order)
-	matcher.MatchOrders(e.OrderBook)
+	if order.Type == book.MarketSell{
+		e.matchMarketOrder(order, book.Sell)
+	}else if order.Type == book.MarketSell{
+		e.matchMarketOrder(order, book.Buy)
+	}else{
+		e.OrderBook.AddOrder(order)
+		matcher.MatchOrders(e.OrderBook)
+	}
+}
+
+func (e *TradingEngine) matchMarketOrder(order book.Order, matchType book.OrderType) {
+	// Ensure market buy matches with sell and market sell matches with buy
+	matcher.MatchMarketOrder(e.OrderBook, order, matchType)
 }
 
 // GetOrderBook provides access to the current order book
