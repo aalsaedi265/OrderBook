@@ -37,3 +37,7 @@ func (e *TradingEngine) matchMarketOrder(order book.Order, matchType book.OrderT
 func (e *TradingEngine) GetOrderBook() *book.Book {
 	return e.OrderBook
 }
+
+func(e *TradingEngine) CancelOrder(orderID string) bool{
+	return e.OrderBook.CancelOrderById(orderID)
+}

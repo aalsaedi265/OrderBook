@@ -27,6 +27,23 @@ func (b *Book) AddOrder(order Order) {
 	}
 }
 
+func(b *Book) CancelOrderById(orderID string) bool{
+	for i , order := range b.buyOrders{
+		if order.ID == orderID{
+			b.RemoveBuyExecutedOrders(i)
+			return true
+		}
+	}
+
+	for i , order := range b.sellOrders{
+		if order.ID == orderID{
+			b.RemoveSellOrders(i)
+			return true
+		}
+	}
+	return false
+}
+
 
 func (b *Book) ListOrders(orderType OrderType) []Order {
 	b.Mu.Lock()
