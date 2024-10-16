@@ -1,41 +1,56 @@
 package main
 
 import (
-	"fmt"
-	"orderbook_tradingEngine/internal/book"
-	"orderbook_tradingEngine/internal/engine"
+	"log"
+	"orderbook_tradingEngine/internal/handlers"
+	"orderbook_tradingEngine/internal/models"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
+	"github.com/gin-gonic/gin"
 )
 
 
 func main() {
-	// Initialize the trading engine
-	tradingEngine := engine.NewTradingEngine()
 
-	order1 := book.NewLimitOrder("1", book.Buy, 100.0, 5)
-	tradingEngine.ProcessOrder(order1)
+	// Initialize the database
+    if err := models.InitDB(); err != nil {
+        log.Fatal("Failed to connect to database:", err)
+    }
+	
+	//web framework routing, middleware, and template rendering
+	 router := gin.Default()
 
-	order2 := book.NewLimitOrder("2", book.Sell, 105.0, 3)
-	tradingEngine.ProcessOrder(order2)
+	// session middleware
+	store := cookie.NewStore([]byte("secret"))
+    router.Use(sessions.Sessions("mysession", store))
 
 
-	// marketBuyOrder := book.Order{
-	// 	ID:     "3",
-	// 	Type:   book.MarketBuy,
-	// 	Amount: 2,
-	// }
-	// tradingEngine.ProcessOrder(marketBuyOrder)
+    // Serve static files
+    router.Static("/static", "./static")
 
-	// marketSellOrder := book.Order{
-	// 	ID:     "4",
-	// 	Type:   book.MarketSell,
-	// 	Amount: 3,
-	// }
-	// tradingEngine.ProcessOrder(marketSellOrder)
+	// Load HTML templates
+    router.LoadHTMLGlob("templates/*")
 
-	fmt.Println("Canceling Order 1 (Buy)")
-	tradingEngine.CancelOrder("1")
+	//Define routes
+	router.GET("/", handlers.ShowIndexPage)
+    router.GET("/register", handlers.ShowRegistrationPage)
+    router.POST("/register", handlers.Register)
+    router.GET("/login", handlers.ShowLoginPage)
+    router.POST("/login", handlers.Login)
+    router.GET("/logout", handlers.Logout)
 
-	// Display the current order book
-	fmt.Println("Buy Orders:", tradingEngine.GetOrderBook().BuyOrders())
-	fmt.Println("Sell Orders:", tradingEngine.GetOrderBook().SellOrders())
+	//Protected routes
+	authorized := router.Group("/")
+	authorized.Use(handlers.AuthRequired)
+	{
+		authorized.GET("/dashboard", handlers.Dashboard)
+        authorized.POST("/place_order", handlers.PlaceOrder)
+        authorized.POST("/cancel_order", handlers.CancelOrder)
+
+	}
+	if err := router.Run(":8080"); err != nil{
+		log.Fatal("server run failed: ", err )
+	}
+
 }

@@ -15,28 +15,53 @@ go test ./internal/book
 ## Run orderbook trading engine
 "from main dir" go run cmd/app/main.go
 
+## Router stuff
+go get -u github.com/gin-gonic/gin
+
+### Install GORM and the SQLite driver:
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/sqlite
+
+
+
 
 order-book/
 │
 ├── cmd/
-│   └── app/                # Entry point directory for the application
-│       └── main.go         # Entry point of the application
+│   └── app/
+│       └── main.go
 │
 ├── internal/
-│   ├── engine/             # Package containing the core trading engine logic
-│   │   └── engine.go       # Trading engine implementation
+│   ├── engine/
+│   │   └── engine.go
 │   │
-│   ├── book/               # Package containing the order book logic
-│   │   ├── order.go        # Definitions and operations related to orders
-│   │   └── book.go         # Order book management
-|   |   |__book_test.go     # Unit tests for the order book
+│   ├── book/
+│   │   ├── order.go
+│   │   └── book.go
 │   │
-│   └── matcher/            # Package for order matching algorithms
-│       └── matcher.go      # Matching algorithm implementation
+│   ├── matcher/
+│   │   └── matcher.go
+│   │
+│   ├── handlers/        # New package for HTTP handlers
+│   │   └── handlers.go
+│   │
+│   └── models/          # New package for data models
+│       └── user.go
 │
-├── go.mod                  # Go module file
-├── go.sum                  # Dependencies checksum file
-└── README.md               # Project documentation
+├── templates/           # New directory for HTML templates
+│   ├── base.html
+│   ├── index.html
+│   ├── login.html
+│   └── register.html
+│
+├── static/              # New directory for static assets
+│   └── css/
+│       └── styles.css
+│
+├── go.mod
+├── go.sum
+└── README.md
+
 
 MVP
 when running tests do it the main directory
