@@ -1,0 +1,34 @@
+
+{{define "content"}}
+<h2> Welcome, {{.Username}} </h2>
+<h3>Balance: ${{ printf "%.2f" .Balance }}</h3>
+
+<h3>Place an Order</h3>
+<form action="/place_order" method="POST">
+    Type: 
+    <select name="type">
+        <option value="buy">Buy</option>
+        <option value="sell">Sell</option>
+    </select><br/>
+    Price: <input type="text" name="price"><br/>
+    Amount: <input type="text" name="amount"><br/>
+    <input type="submit" value="Place Order">
+</form>
+
+<h3>Orders</h3>
+<div hx-get="/open_orders" hx-trigger="load" hx-swap="outerHTML">
+
+</div>
+
+<h3>Portfolio</h3>
+<div hx-get="/positions" hx-trigger="load" hx-swap="outerHTML">
+
+</div>
+
+<h3>Trade History</h3>
+<div hx-get="/trade_history" hx-trigger="load" hx-swap="outerHTML">
+
+</div>
+
+<p><a href="/logout">Logout</a></p>
+{{end}}

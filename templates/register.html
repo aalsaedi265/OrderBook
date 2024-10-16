@@ -1,0 +1,14 @@
+
+{{define "content"}}
+
+<h2> Register </h2>
+<form action="/register" method="POST">
+    Username: <input type="text" name="username"><br>
+    Password: <input type="password" name="password"><br>
+    <input type="submit" value="Register">
+</form>
+{{if .Error}}
+    <p style="color:red;">{{.Error}}</p>
+{{end}}
+<p>Already have an account? <a href="/login">Login</a></p>
+{{end}}

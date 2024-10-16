@@ -53,6 +53,7 @@ order-book/
 │   ├── index.html
 │   ├── login.html
 │   └── register.html
+|   └── dashboard.html
 │
 ├── static/              # New directory for static assets
 │   └── css/
